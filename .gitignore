@@ -1,0 +1,55 @@
+# Prerequisites & Build Directories
+build/
+bin/
+out/
+CMakeUserPresets.json
+
+# CMake Generated Files
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+*.cmake
+compile_commands.json
+
+# IDE and Editor Files
+# VS Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+# CLion / JetBrains
+.idea/
+cmake-build-*/
+
+# Xcode
+*.xcodeproj/
+*.xcworkspace/
+*.xcuserstate
+
+# Visual Studio
+.vs/
+*.sln
+*.vcxproj*
+
+# macOS System Files
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+# Compiled Binaries & Libraries
+*.o
+*.obj
+*.dylib
+*.so
+*.dll
+*.exe
+*.out
+*.app
+*.dSYM/
