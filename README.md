@@ -43,7 +43,7 @@ cmake --build build
 ### 2. Run
 
 ```bash
-./build/app
+./build/labs/01_primitives/lab01_primitives
 ```
 
 ---
@@ -52,11 +52,19 @@ cmake --build build
 
 ```text
 opengl-sandbox/
-├── CMakeLists.txt     # Build configuration
-├── include/           # Third-party headers (GLAD, KHR)
-├── src/               # Supporting source files (glad.c)
-├── main.cpp           # Entry point and render loop
-└── README.md          # Project documentation
+├── CMakeLists.txt        # Root build configuration
+├── core/                 # Shared graphics framework (static library)
+│   ├── CMakeLists.txt
+│   ├── include/          # Headers (core/Application.hpp, core/Shader.hpp, glad, KHR)
+│   └── src/              # Sources (Application.cpp, Shader.cpp, glad.c)
+├── labs/                 # Laboratory assignments
+│   ├── CMakeLists.txt
+│   └── 01_primitives/    # Lab 01: Primitives (Hello Triangle)
+│       ├── CMakeLists.txt
+│       ├── HELLO_TRIANGLE_UA.md
+│       ├── main.cpp
+│       └── shaders/
+└── README.md             # Project documentation
 ```
 
 ---
@@ -65,8 +73,10 @@ opengl-sandbox/
 
 - [x] Basic window creation & context initialization (GLFW + GLAD)
 - [x] Render loop & Retina framebuffer scaling
-- [ ] Triangle rendering (VBO, VAO, EBO)
-- [ ] GLSL Shaders & uniform buffers
+- [x] Triangle rendering (VBO, VAO) — *див. [Детальне пояснення (UA)](./labs/01_primitives/HELLO_TRIANGLE_UA.md)*
+- [x] Basic GLSL Shaders (Vertex & Fragment compilation/linking)
+- [ ] Element Buffer Objects (EBO / Index Buffers)
+- [ ] Uniform variables & dynamic colors
 - [ ] Textures & Samplers
 - [ ] 3D Coordinate systems (Model, View, Projection matrices)
 - [ ] Basic lighting (Phong / Blinn-Phong)

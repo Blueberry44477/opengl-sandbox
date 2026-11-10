@@ -1,30 +1,29 @@
-cmake_minimum_required(VERSION 3.16)
-project(OpenGLProject CXX C)
+cmake_minimum_required(VERSION 3.20)
+
+project(OpenGLSandbox
+    VERSION 1.0.0
+    DESCRIPTION "OpenGL (Core Profile) Learning Sandbox"
+    LANGUAGES C CXX
+)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_PREFIX_PATH "/opt/homebrew")
+set(CMAKE_CXX_EXTENSIONS OFF)
 
-find_package(glfw3 REQUIRED)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-find_library(OPENGL_LIB OpenGL REQUIRED)
-find_library(COCOA_LIB Cocoa REQUIRED)
-find_library(IOKIT_LIB IOKit REQUIRED)
-find_library(COREVIDEO_LIB CoreVideo REQUIRED)
+if(APPLE)
+    list(PREPEND CMAKE_PREFIX_PATH "/opt/homebrew" "/usr/local")
+endif()
 
-add_executable(app 
-    main.cpp 
-    src/glad.c
-)
+find_package(OpenGL REQUIRED)
+find_package(glfw3 3.3 REQUIRED)
 
-target_include_directories(app PRIVATE 
-    ${CMAKE_CURRENT_SOURCE_DIR}/include
-)
+if(MSVC)
+    add_compile_options(/W4 /permissive-)
+else()
+    add_compile_options(-Wall -Wextra -Wpedantic)
+endif()
 
-target_link_libraries(app PRIVATE
-    glfw
-    ${OPENGL_LIB}
-    ${COCOA_LIB}
-    ${IOKIT_LIB}
-    ${COREVIDEO_LIB}
-)
+add_subdirectory(core)
+add_subdirectory(labs)
