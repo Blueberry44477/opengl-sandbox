@@ -1,17 +1,16 @@
-#include <iostream>
 #include <core/Application.hpp>
 #include <core/Shader.hpp>
-#include <stb/stb_image.h>
+#include <core/Texture.hpp>
 
 #include <glad/glad.h>
 #include <memory>
 
 namespace {
 
-class PrimitivesApp : public core::Application {
+class TexturesApp : public core::Application {
 public:
-    PrimitivesApp()
-        : Application({ "Textures", 800, 600, true }) {}
+    TexturesApp()
+        : Application({ "Lab 02: Textures", 800, 600, true }) {}
 
     void onInit() override {
         m_shader = std::make_unique<core::Shader>(
@@ -19,36 +18,18 @@ public:
             "shaders/triangle.frag"
         );
 
-        // Define texture
-        glGenTextures(1, &m_texture);
-        glBindTexture(GL_TEXTURE_2D, m_texture);
+        m_texture = std::make_unique<core::Texture>("assets/textures/rocks.png");
 
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-        // Load texture
-        int width, height, nrChannels;
-        const auto data = stbi_load("../../assets/textures/fabric.jpg", &width, &height, &nrChannels, 0);
-
-        if (data) {
-            const GLenum format = (nrChannels == 4) ? GL_RGBA : GL_RGB;
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, format, GL_UNSIGNED_BYTE, data);
-            glGenerateMipmap(GL_TEXTURE_2D);
-        } else {
-            std::cout << "Failed to load texture" << std::endl;
-        }
-
-        stbi_image_free(data);
+        m_shader->use();
+        m_shader->setInt("ourTexture", 0);
 
         constexpr float vertices[] = {
+            // Positions          // Colors           // Texture Coords
              0.5f, -0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 0.0f,
             -0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   0.0f, 0.0f,
              0.0f,  0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.5f, 1.0f
         };
 
-        // Generate and bind VAO & VBO
         glGenVertexArrays(1, &m_vao);
         glGenBuffers(1, &m_vbo);
 
@@ -81,9 +62,9 @@ public:
         if (m_shader) {
             m_shader->use();
         }
-
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, m_texture);
+        if (m_texture) {
+            m_texture->bind(0);
+        }
 
         glBindVertexArray(m_vao);
         glDrawArrays(GL_TRIANGLES, 0, 3);
@@ -91,7 +72,6 @@ public:
     }
 
     void onDestroy() override {
-        // Clean up GPU buffer objects
         if (m_vao) {
             glDeleteVertexArrays(1, &m_vao);
             m_vao = 0;
@@ -100,24 +80,20 @@ public:
             glDeleteBuffers(1, &m_vbo);
             m_vbo = 0;
         }
-        if (m_texture) {
-            glDeleteTextures(1, &m_texture);
-            m_texture = 0;
-        }
+        m_texture.reset();
         m_shader.reset();
     }
 
 private:
     std::unique_ptr<core::Shader> m_shader;
+    std::unique_ptr<core::Texture> m_texture;
     unsigned int m_vao = 0;
     unsigned int m_vbo = 0;
-
-    unsigned int m_texture = 0;
 };
 
-}
+} // namespace
 
 int main() {
-    PrimitivesApp app;
+    TexturesApp app;
     return app.run();
 }
