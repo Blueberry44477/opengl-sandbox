@@ -4,7 +4,12 @@
 
 #include <glad/glad.h>
 
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 #include <memory>
+#include <GLFW/glfw3.h>
 
 namespace {
 
@@ -66,6 +71,11 @@ public:
         if (m_texture) {
             m_texture->bind(0);
         }
+
+        auto transform = glm::mat4(1.0f);
+        transform = glm::rotate(transform, -static_cast<float>(glfwGetTime()), glm::vec3(0.0f, 0.0f, 1.0f));
+
+        m_shader->setMat4("transform", transform);
 
         glBindVertexArray(m_vao);
         glDrawArrays(GL_TRIANGLES, 0, 3);
