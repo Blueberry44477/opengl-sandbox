@@ -2,6 +2,7 @@ add_library(core STATIC
     src/glad.c
     src/Shader.cpp
     src/Application.cpp
+    src/stb_image.cpp
 )
 
 add_library(core::core ALIAS core)
