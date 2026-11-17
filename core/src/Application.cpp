@@ -62,12 +62,17 @@ bool Application::init() {
     glfwSetWindowUserPointer(m_window, this);
 
     glfwSetFramebufferSizeCallback(m_window, [](GLFWwindow* window, int width, int height) {
-        auto* app = static_cast<Application*>(glfwGetWindowUserPointer(window));
-        if (app) {
+        if (auto* app = static_cast<Application*>(glfwGetWindowUserPointer(window))) {
             app->onResize(width, height);
         }
     });
 
+    glfwSetScrollCallback(m_window, [](GLFWwindow* window, const double xOffset, const double yOffset) {
+        if (auto* app = static_cast<Application*>(glfwGetWindowUserPointer(window))) {
+            app->onScroll(xOffset, yOffset);
+        }
+    });
+    
     // Account for Retina / HiDPI framebuffers
     int fbWidth = 0;
     int fbHeight = 0;
@@ -107,10 +112,10 @@ int Application::run() {
     m_isRunning = true;
     onInit();
 
-    float lastFrameTime = static_cast<float>(glfwGetTime());
+    auto lastFrameTime = static_cast<float>(glfwGetTime());
 
     while (m_isRunning && !glfwWindowShouldClose(m_window)) {
-        const float currentTime = static_cast<float>(glfwGetTime());
+        const auto currentTime = static_cast<float>(glfwGetTime());
         const float deltaTime = currentTime - lastFrameTime;
         lastFrameTime = currentTime;
 
