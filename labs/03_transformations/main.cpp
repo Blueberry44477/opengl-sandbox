@@ -18,7 +18,10 @@ public:
     TexturesApp()
         : Application({ "Lab 03: Transformations", 800, 600, true }) {}
 
-    void onScroll(double , const double yOffset) override {
+    void onScroll(const double xOffset, const double yOffset) override {
+        m_offsetX += static_cast<float>(xOffset) * 0.05f;
+        m_offsetX = std::clamp(m_offsetX, -1.0f, 1.0f);
+
         m_scale += static_cast<float>(yOffset) * 0.1f;
         m_scale = std::clamp(m_scale, 0.1f, 5.0f);
     }
@@ -78,6 +81,7 @@ public:
         }
 
         auto transform = glm::mat4(1.0f);
+        transform = glm::translate(transform, glm::vec3(m_offsetX, 0.0f, 0.0f));
         transform = glm::scale(transform, glm::vec3(m_scale, m_scale, 1.0f));
         transform = glm::rotate(transform, -static_cast<float>(glfwGetTime()), glm::vec3(0.0f, 0.0f, 1.0f));
 
@@ -104,7 +108,9 @@ public:
 private:
     std::unique_ptr<core::Shader> m_shader;
     std::unique_ptr<core::Texture> m_texture;
+
     float m_scale = 1.0f;
+    float m_offsetX = 0.0f;
 
     unsigned int m_vao = 0;
     unsigned int m_vbo = 0;
