@@ -19,6 +19,14 @@ endif()
 find_package(OpenGL REQUIRED)
 find_package(glfw3 3.3 REQUIRED)
 
+include(FetchContent)
+FetchContent_Declare(
+    glm
+    GIT_REPOSITORY https://github.com/g-truc/glm.git
+    GIT_TAG        1.0.1
+)
+FetchContent_MakeAvailable(glm)
+
 if(MSVC)
     add_compile_options(/W4 /permissive-)
 else()

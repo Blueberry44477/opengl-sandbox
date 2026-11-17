@@ -28,6 +28,10 @@ public:
     virtual void onRender() = 0;
     virtual void onDestroy() {}
     virtual void onResize(int width, int height);
+    virtual void onScroll(const double xOffset, const double yOffset) {
+        (void)xOffset;
+        (void)yOffset;
+    }
 
     [[nodiscard]] GLFWwindow* getNativeWindow() const { return m_window; }
     [[nodiscard]] int getWidth() const { return m_config.width; }

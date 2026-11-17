@@ -21,6 +21,7 @@ target_link_libraries(core
     PUBLIC
         OpenGL::GL
         glfw
+        glm::glm
 )
 
 # macOS system framework dependencies
