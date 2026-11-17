@@ -1,6 +1,7 @@
 #define GL_SILENCE_DEPRECATION
 #include <core/Shader.hpp>
 #include <glad/glad.h>
+#include <glm/gtc/type_ptr.hpp>
 
 #include <filesystem>
 #include <fstream>
@@ -154,6 +155,10 @@ void Shader::setVec3(const std::string& name, const float x, const float y, cons
 
 void Shader::setMat4(const std::string& name, const float* matrixData) const {
     glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, matrixData);
+}
+
+void Shader::setMat4(const std::string& name, const glm::mat4& mat) const {
+    setMat4(name, glm::value_ptr(mat));
 }
 
 } // namespace core
